@@ -1,24 +1,25 @@
 ---
 name: create-pr
-description: Generate professional Pull Request
+description: Gera Pull Request padronizado, pronto para revisão humana
 ---
 
-Gerar:
+## Gerar
 
+```
 # Context
-
 # Problem
-
 # Solution
-
 # Technical Details
-
 # Impact
-
 # Validation
-
+(resultado do quality-gate)
 # Rollback Strategy
+```
 
-Formato:
+## Commits
 
-Markdown pronto para GitHub.
+Seguir Conventional Commits (`feat:`, `fix:`, `refactor:`, `chore:`, `test:`, `docs:`).
+
+## Formato
+
+Markdown pronto para colar direto no GitHub/GitLab.

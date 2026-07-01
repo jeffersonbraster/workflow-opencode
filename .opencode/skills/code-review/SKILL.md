@@ -1,28 +1,20 @@
 ---
 name: code-review
-description: Senior level code review
+description: Revisão técnica nível sênior, para uso avulso (ex: revisar PR de terceiros)
 ---
 
-Revisar:
+## Revisar
 
-- bugs
-- regressões
-- performance
-- legibilidade
-- segurança
-- complexidade
+- Bugs, regressões, performance, legibilidade, segurança, complexidade
 
-Analisar:
+## Analisar
 
-- nomes
-- abstrações
-- reutilização
-- aderência ao padrão
+- Nomes, abstrações, reutilização, aderência ao padrão do projeto
 
-Retornar:
+## Retornar
 
+```
 # Critical Issues
-
 # Improvements
-
 # Nice To Have
+```

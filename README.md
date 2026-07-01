@@ -1,385 +1,161 @@
 # OpenCode Engineering Team
 
-Sistema de agentes e skills para transformar o OpenCode em um ambiente de desenvolvimento assistido por IA com fluxo semelhante ao de uma equipe de engenharia.
+Sistema de agentes e skills para transformar o OpenCode em um ambiente de desenvolvimento assistido por IA, com fluxo semelhante ao de uma equipe de engenharia — funcionando tanto em projetos modernos (Node/React/Next/TS) quanto em projetos de trabalho com Jinja2, JavaScript puro e ferramentas internas restritas.
 
 ---
 
 ## Objetivo
 
-Padronizar a forma como tarefas são analisadas, planejadas, implementadas, revisadas e testadas.
+Padronizar como tarefas são analisadas, planejadas, implementadas, revisadas e testadas.
 
-O foco é:
+Foco:
 
 * Menos improvisação
-* Mais aderência ao padrão do projeto
-* Melhor qualidade de código
+* Mais aderência ao padrão de cada projeto
+* Melhor qualidade de código, com verificação real (não só "parece certo")
 * Menos regressões
-* Melhor produtividade
+* Velocidade sem pular etapas críticas
 
 ---
 
-# Estrutura
+## Estrutura real
 
 ```text
-~/.config/opencode/
+.opencode/
+├── agents/
+│   ├── orchestrator.md
+│   ├── investigator.md
+│   ├── planner.md
+│   ├── implementer.md
+│   ├── reviewer.md
+│   └── tester.md
+└── skills/
+    ├── detect-stack/SKILL.md
+    ├── quick-fix/SKILL.md
+    ├── quality-gate/SKILL.md
+    ├── work-stack-jinja-vanilla/SKILL.md
+    ├── feature-workflow/SKILL.md
+    ├── bugfix-workflow/SKILL.md
+    ├── architecture-analysis/SKILL.md
+    ├── test-strategy/SKILL.md
+    ├── legacy-project/SKILL.md
+    ├── create-pr/SKILL.md
+    ├── code-review/SKILL.md
+    ├── root-cause-analysis/SKILL.md
+    ├── refactoring/SKILL.md
+    └── performance-analysis/SKILL.md
 
 AGENTS.md
+```
 
-agents/
-├── orchestrator.md
-├── investigator.md
-├── planner.md
-├── implementer.md
-├── reviewer.md
-└── tester.md
+> **Importante:** confira na sua versão instalada do OpenCode se o nome esperado das pastas globais é `agent`/`skill` (singular) ou `agents`/`skills` (plural) — a documentação oficial usa singular para configuração global em `~/.config/opencode/`, mas versões/forks podem variar. Rode `opencode agent list` e `opencode skill list` (ou equivalente) após instalar para confirmar que tudo foi reconhecido.
 
-skills/
-├── detect-stack/
-│   └── SKILL.md
-├── feature-workflow/
-│   └── SKILL.md
-├── bugfix-workflow/
-│   └── SKILL.md
-├── architecture-analysis/
-│   └── SKILL.md
-├── test-strategy/
-│   └── SKILL.md
-├── legacy-project/
-│   └── SKILL.md
-├── create-pr/
-│   └── SKILL.md
-├── code-review/
-│   └── SKILL.md
-├── root-cause-analysis/
-│   └── SKILL.md
-├── refactoring/
-│   └── SKILL.md
-└── performance-analysis/
-    └── SKILL.md
+Para uso **global** (todos os projetos): copie o conteúdo de `.opencode/` para `~/.config/opencode/` (ajustando o nome das pastas conforme a nota acima) e o `AGENTS.md` para `~/.config/opencode/AGENTS.md`.
+
+Para uso **por projeto**: coloque a pasta `.opencode/` na raiz do projeto. Um `AGENTS.md` local nesse projeto tem prioridade sobre o global.
+
+---
+
+## Agentes
+
+### Orchestrator
+Coordena o fluxo completo. Nunca implementa diretamente (tools de escrita desabilitadas no próprio agente). Decide entre fluxo completo e fluxo rápido.
+
+### Investigator
+Analisa stack, arquitetura, arquivos e impactos. Somente leitura (write/edit desabilitados).
+
+### Planner
+Gera plano de execução a partir do relatório do investigator. Somente leitura.
+
+### Implementer
+Único agente com permissão de escrita. Implementa seguindo o plano e os padrões existentes.
+
+### Reviewer
+Revisão técnica cética: bugs, regressões, segurança, performance, legibilidade. Somente leitura.
+
+### Tester
+Define cenários de teste e roda a skill `quality-gate` (lint, type-check, build, testes) de verdade via bash.
+
+---
+
+## Skills
+
+| Skill | Função |
+|---|---|
+| `detect-stack` | Identifica linguagem, framework, arquitetura, monorepo |
+| `quick-fix` | Critério para pular o fluxo completo em tasks triviais |
+| `quality-gate` | Executa lint/type-check/build/testes reais antes de finalizar |
+| `work-stack-jinja-vanilla` | Convenções para Jinja2, JS puro e ferramentas internas restritas |
+| `feature-workflow` | Fluxo completo para novas funcionalidades |
+| `bugfix-workflow` | Fluxo completo para correção de bugs |
+| `architecture-analysis` | Identifica o padrão arquitetural do projeto |
+| `test-strategy` | Define estratégia de testes antes de implementar |
+| `legacy-project` | Regras de segurança para sistemas legados |
+| `create-pr` | Gera Pull Request padronizado |
+| `code-review` | Revisão técnica avulsa (ex: PR de terceiros) |
+| `root-cause-analysis` | Investiga causa raiz, não só sintoma |
+| `refactoring` | Refatoração segura sem alterar comportamento |
+| `performance-analysis` | Identifica gargalos de performance |
+
+---
+
+## Fluxo recomendado
+
+**Nova funcionalidade:**
+```
+Investigator → Planner → Implementer → Reviewer → Tester
+```
+
+**Bug:**
+```
+Investigator → Root Cause Analysis → Implementer → Reviewer → Tester
+```
+
+**Task trivial** (ver critérios em `quick-fix`):
+```
+Implementer → Reviewer (leve) → Quality Gate
 ```
 
 ---
 
-# Agentes
-
-## Orchestrator
-
-Responsável por coordenar o fluxo completo.
-
-Responsabilidades:
-
-* Delegar investigação
-* Delegar planejamento
-* Delegar implementação
-* Delegar revisão
-* Delegar testes
-* Consolidar resultados
-
-Não deve implementar código diretamente.
-
----
-
-## Investigator
-
-Responsável por analisar o projeto.
-
-Atividades:
-
-* Detectar stack
-* Detectar arquitetura
-* Identificar arquivos
-* Identificar dependências
-* Mapear impactos
-
-Não deve modificar código.
-
----
-
-## Planner
-
-Responsável por criar planos de execução.
-
-Atividades:
-
-* Dividir tarefas
-* Identificar riscos
-* Definir ordem de implementação
-* Definir estratégia de testes
-
-Não deve modificar código.
-
----
-
-## Implementer
-
-Responsável pela implementação.
-
-Atividades:
-
-* Criar funcionalidades
-* Corrigir bugs
-* Aplicar padrões existentes
-* Respeitar arquitetura do projeto
-
----
-
-## Reviewer
-
-Responsável pela revisão.
-
-Atividades:
-
-* Encontrar bugs
-* Identificar regressões
-* Avaliar performance
-* Avaliar segurança
-* Avaliar legibilidade
-
----
-
-## Tester
-
-Responsável pela validação.
-
-Atividades:
-
-* Criar cenários
-* Identificar edge cases
-* Validar fluxos
-* Sugerir testes automatizados
-
----
-
-# Skills
-
-## detect-stack
-
-Identifica:
-
-* Linguagem
-* Framework
-* ORM
-* Banco de dados
-* Ferramentas
-* Arquitetura
-
----
-
-## feature-workflow
-
-Fluxo completo para novas funcionalidades.
-
-Etapas:
-
-1. Investigação
-2. Planejamento
-3. Implementação
-4. Revisão
-5. Testes
-
----
-
-## bugfix-workflow
-
-Fluxo completo para correção de bugs.
-
-Etapas:
-
-1. Reprodução
-2. Causa raiz
-3. Correção
-4. Revisão
-5. Testes
-
----
-
-## architecture-analysis
-
-Analisa a arquitetura do sistema.
-
-Identifica:
-
-* MVC
-* DDD
-* Clean Architecture
-* Hexagonal
-* Modular Monolith
-* Microservices
-
----
-
-## test-strategy
-
-Define estratégia de testes.
-
-Inclui:
-
-* Unitários
-* Integração
-* E2E
-* Regressão
-
----
-
-## legacy-project
-
-Especializado em sistemas legados.
-
-Objetivos:
-
-* Minimizar riscos
-* Evitar reescritas desnecessárias
-* Preservar comportamento existente
-
----
-
-## create-pr
-
-Gera Pull Requests padronizados.
-
-Inclui:
-
-* Contexto
-* Problema
-* Solução
-* Impacto
-* Validação
-* Rollback
-
----
-
-## code-review
-
-Realiza revisão técnica.
-
-Analisa:
-
-* Bugs
-* Segurança
-* Performance
-* Complexidade
-* Legibilidade
-
----
-
-## root-cause-analysis
-
-Investiga causas raízes de problemas.
-
-Objetivo:
-
-Corrigir a origem do problema, não apenas os sintomas.
-
----
-
-## refactoring
-
-Refatoração segura.
-
-Objetivos:
-
-* Reduzir complexidade
-* Melhorar legibilidade
-* Remover duplicações
-
----
-
-## performance-analysis
-
-Análise de performance.
-
-Avalia:
-
-* Queries
-* Renderizações
-* Consumo de memória
-* Gargalos
-
----
-
-# Fluxo recomendado
-
-Nova funcionalidade:
-
-```text
-Investigator
-↓
-Planner
-↓
-Implementer
-↓
-Reviewer
-↓
-Tester
-```
-
-Bug:
-
-```text
-Investigator
-↓
-Root Cause Analysis
-↓
-Implementer
-↓
-Reviewer
-↓
-Tester
-```
-
----
-
-# Como utilizar
+## Como usar
 
 Análise inicial do projeto:
-
-```text
+```
 @investigator
-
 Analise completamente este projeto.
 ```
 
 Nova funcionalidade:
-
-```text
+```
 @orchestrator
-
 Adicionar exportação CSV para usuários.
 ```
 
 Correção de bug:
-
-```text
+```
 @orchestrator
-
 Corrigir erro 500 ao salvar cliente.
 ```
 
-Revisão de código:
-
-```text
-@reviewer
-
-Revise as alterações realizadas.
+Revisão avulsa de código (ex: PR de outra pessoa):
+```
+Use a skill code-review para revisar esse PR.
 ```
 
 Análise de performance:
-
-```text
+```
 Use performance-analysis para analisar gargalos.
 ```
 
 ---
 
-# Boas práticas
+## Boas práticas
 
 * Sempre investigar antes de implementar.
 * Sempre revisar antes de concluir.
-* Sempre validar impactos.
-* Seguir padrões existentes do projeto.
-* Evitar reescritas desnecessárias.
-* Priorizar simplicidade e manutenção.
-* Utilizar AGENTS.md como fonte principal de convenções.
-
-```
-```
+* Nunca considerar uma task pronta sem o `quality-gate` passar de verdade.
+* Seguir os padrões já existentes do projeto — modernizar não é o objetivo por padrão.
+* Priorizar simplicidade e manutenção sobre abstração prematura.
+* Usar `AGENTS.md` como fonte principal de convenções.
+* Em código legado (Jinja2, JS puro, ferramentas internas): mudança mínima, comportamento preservado, sempre.

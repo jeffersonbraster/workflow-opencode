@@ -1,13 +1,15 @@
 ---
 name: feature-workflow
-description: Complete workflow for new features
+description: Fluxo completo para novas funcionalidades
 ---
 
-Fluxo:
+## Etapas
 
-1. Investigar
-2. Planejar
-3. Implementar
-4. Revisar
-5. Testar
-6. Gerar resumo final
+1. Investigação (`@investigator`)
+2. Planejamento (`@planner`)
+3. Implementação (`@implementer`)
+4. Revisão (`@reviewer`)
+5. Testes + Quality Gate (`@tester`)
+6. Resumo final (orchestrator)
+
+Novas features **nunca** usam o fluxo rápido (`quick-fix`), mesmo que pareçam pequenas.

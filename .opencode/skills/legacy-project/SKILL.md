@@ -1,27 +1,28 @@
 ---
 name: legacy-project
-description: Work safely with legacy systems
+description: Trabalhar com segurança em sistemas legados
 ---
 
-Ao trabalhar em sistemas legados:
+## Nunca
 
-Nunca:
+- Reescrever módulos inteiros
+- Trocar arquitetura ou framework
+- Trocar bibliotecas por preferência pessoal
+- Criar abstrações grandes para um caso de uso único
 
-- reescrever módulos inteiros
-- trocar arquitetura
-- trocar framework
-- criar abstrações grandes
+## Sempre
 
-Sempre:
+- Alterar o mínimo possível
+- Preservar comportamento existente
+- Validar impactos antes de mexer
+- Combinar com `work-stack-jinja-vanilla` quando aplicável
 
-- alterar o mínimo possível
-- preservar comportamento
-- validar impactos
+## Identificar
 
-Identificar:
+- Pontos frágeis
+- Dependências ocultas
+- Side effects (ex: omissão de um campo disparando comportamento amplo)
 
-- pontos frágeis
-- dependências ocultas
-- side effects
+## Retornar
 
-Retornar plano conservador.
+Plano conservador, com o menor diff possível.

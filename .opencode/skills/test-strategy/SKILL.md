@@ -1,30 +1,28 @@
 ---
 name: test-strategy
-description: Build testing strategy before implementation
+description: Define estratégia de testes antes de qualquer implementação
 ---
 
-Antes de qualquer alteração:
+## Antes de qualquer alteração
 
-Identifique:
+Identificar:
 
-- testes existentes
-- framework de testes
-- cobertura impactada
+- Framework de testes já usado (Jest, Vitest, Testing Library, pytest, etc)
+- Testes existentes que cobrem a área afetada
+- Se não existe framework de testes configurado, reportar isso explicitamente — não silenciar
 
-Gerar:
+## Gerar
 
+```
 # Unit Tests
-
 # Integration Tests
-
-# E2E Tests
-
+# E2E Tests (se aplicável)
 # Edge Cases
-
 # Regression Scenarios
+```
 
-Priorizar:
+## Priorizar
 
-- menor custo
-- maior cobertura
-- cenários críticos
+- Menor custo de implementação, maior cobertura de risco
+- Cenários críticos de negócio antes de casos triviais
+- Em projetos sem testes: sugerir o mínimo viável para a task atual — não propor suíte completa do zero como bloqueio
