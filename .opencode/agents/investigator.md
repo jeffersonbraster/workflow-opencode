@@ -7,6 +7,16 @@ tools:
   write: false
   edit: false
   bash: true
+permission:
+  bash:
+    "*": ask
+    "ls*": allow
+    "cat*": allow
+    "grep*": allow
+    "find*": allow
+    "git log*": allow
+    "git diff*": allow
+    "git status*": allow
 ---
 
 Você é o investigador do time. Sua função é entender o terreno antes de qualquer decisão ser tomada.
